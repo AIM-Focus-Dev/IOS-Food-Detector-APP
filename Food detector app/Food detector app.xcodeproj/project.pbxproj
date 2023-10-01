@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		4726A1F82AC5A89D002EE423 /* CameraProccessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4726A1F72AC5A89D002EE423 /* CameraProccessor.swift */; };
+		4744E0AD2AC7B6A400040104 /* FoodCL.mlpackage in Sources */ = {isa = PBXBuildFile; fileRef = 4744E0AC2AC7B6A400040104 /* FoodCL.mlpackage */; };
+		478C3C2D2AC89919003345A7 /* prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478C3C2C2AC89919003345A7 /* prediction.swift */; };
+		478C3C2F2AC89A3C003345A7 /* labels.txt in Resources */ = {isa = PBXBuildFile; fileRef = 478C3C2E2AC89A3C003345A7 /* labels.txt */; };
+		478C3C312AC90165003345A7 /* CameraProcessorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478C3C302AC90165003345A7 /* CameraProcessorViewModel.swift */; };
+		478C3C332AC90278003345A7 /* ImageFramesPreprocessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478C3C322AC90278003345A7 /* ImageFramesPreprocessing.swift */; };
 		47A085562AC44D2C00EF8B99 /* Food_detector_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A085552AC44D2C00EF8B99 /* Food_detector_appApp.swift */; };
 		47A085582AC44D2C00EF8B99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47A085572AC44D2C00EF8B99 /* ContentView.swift */; };
 		47A0855A2AC44D2D00EF8B99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 47A085592AC44D2D00EF8B99 /* Assets.xcassets */; };
@@ -16,6 +21,11 @@
 
 /* Begin PBXFileReference section */
 		4726A1F72AC5A89D002EE423 /* CameraProccessor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraProccessor.swift; sourceTree = "<group>"; };
+		4744E0AC2AC7B6A400040104 /* FoodCL.mlpackage */ = {isa = PBXFileReference; lastKnownFileType = folder.mlpackage; path = FoodCL.mlpackage; sourceTree = "<group>"; };
+		478C3C2C2AC89919003345A7 /* prediction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = prediction.swift; sourceTree = "<group>"; };
+		478C3C2E2AC89A3C003345A7 /* labels.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = labels.txt; sourceTree = "<group>"; };
+		478C3C302AC90165003345A7 /* CameraProcessorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraProcessorViewModel.swift; sourceTree = "<group>"; };
+		478C3C322AC90278003345A7 /* ImageFramesPreprocessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFramesPreprocessing.swift; sourceTree = "<group>"; };
 		47A085522AC44D2C00EF8B99 /* Food detector app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Food detector app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		47A085552AC44D2C00EF8B99 /* Food_detector_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Food_detector_appApp.swift; sourceTree = "<group>"; };
 		47A085572AC44D2C00EF8B99 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -34,9 +44,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4744E0AB2AC7B6A400040104 /* ML_model */ = {
+			isa = PBXGroup;
+			children = (
+				478C3C2E2AC89A3C003345A7 /* labels.txt */,
+				478C3C2C2AC89919003345A7 /* prediction.swift */,
+				4744E0AC2AC7B6A400040104 /* FoodCL.mlpackage */,
+			);
+			name = ML_model;
+			path = "Food detector app/ML_model";
+			sourceTree = "<group>";
+		};
+		478C3C342AC903C0003345A7 /* ProcessingHelperFiles */ = {
+			isa = PBXGroup;
+			children = (
+				478C3C322AC90278003345A7 /* ImageFramesPreprocessing.swift */,
+				478C3C302AC90165003345A7 /* CameraProcessorViewModel.swift */,
+			);
+			path = ProcessingHelperFiles;
+			sourceTree = "<group>";
+		};
 		47A085492AC44D2C00EF8B99 = {
 			isa = PBXGroup;
 			children = (
+				4744E0AB2AC7B6A400040104 /* ML_model */,
 				47A085542AC44D2C00EF8B99 /* Food detector app */,
 				47A085532AC44D2C00EF8B99 /* Products */,
 			);
@@ -53,6 +84,7 @@
 		47A085542AC44D2C00EF8B99 /* Food detector app */ = {
 			isa = PBXGroup;
 			children = (
+				478C3C342AC903C0003345A7 /* ProcessingHelperFiles */,
 				4726A1F72AC5A89D002EE423 /* CameraProccessor.swift */,
 				47A085552AC44D2C00EF8B99 /* Food_detector_appApp.swift */,
 				47A085572AC44D2C00EF8B99 /* ContentView.swift */,
@@ -129,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				47A0855D2AC44D2D00EF8B99 /* Preview Assets.xcassets in Resources */,
+				478C3C2F2AC89A3C003345A7 /* labels.txt in Resources */,
 				47A0855A2AC44D2D00EF8B99 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -140,8 +173,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				478C3C312AC90165003345A7 /* CameraProcessorViewModel.swift in Sources */,
+				478C3C2D2AC89919003345A7 /* prediction.swift in Sources */,
 				4726A1F82AC5A89D002EE423 /* CameraProccessor.swift in Sources */,
+				478C3C332AC90278003345A7 /* ImageFramesPreprocessing.swift in Sources */,
 				47A085582AC44D2C00EF8B99 /* ContentView.swift in Sources */,
+				4744E0AD2AC7B6A400040104 /* FoodCL.mlpackage in Sources */,
 				47A085562AC44D2C00EF8B99 /* Food_detector_appApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -206,6 +243,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -262,6 +300,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;

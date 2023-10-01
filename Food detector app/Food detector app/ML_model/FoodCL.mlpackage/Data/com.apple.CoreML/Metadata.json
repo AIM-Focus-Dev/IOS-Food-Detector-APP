@@ -1,0 +1,10 @@
+{
+  "MLModelVersionStringKey" : "1.0.0",
+  "MLModelDescriptionKey" : "Food Classifier",
+  "MLModelCreatorDefinedKey" : {
+    "com.github.apple.coremltools.version" : "6.3.0",
+    "com.github.apple.coremltools.source" : "torch==2.0.1"
+  },
+  "MLModelAuthorKey" : "Nelio",
+  "MLModelLicenseKey" : "--"
+}

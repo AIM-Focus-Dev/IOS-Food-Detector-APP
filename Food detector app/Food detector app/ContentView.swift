@@ -3,76 +3,64 @@ import AVKit
 
 struct ContentView: View {
     @State private var isScanning = false
-    
-    // Create an instance of CameraProcessor
-    private let cameraProcessor = CameraProcessor()
+    @State private var currentPrediction = "No prediction"
+    @State private var cameraProcessor: CameraProcessor? = nil
     
     var body: some View {
         VStack {
-            // Your custom icons
-            Image(systemName: "scanner")
-            Image(systemName: "fork.knife.circle.fill")
-            
-            // Placeholder for Camera Feed
-            if isScanning {
-                CameraPreview(captureSession: cameraProcessor.captureSession)
-                    .frame(width: 300, height: 300)
-                    .cornerRadius(12)
-            } else {
-                Color.white
-                    .frame(width: 300, height: 300)
-                    .cornerRadius(12)
+            VStack {
+                Text("Food Detector")
+                    .font(.largeTitle)
+                    .padding(.bottom, 20)
             }
+            .padding(.top, 20)
             
-            Text("Press the 'start scanning' button to find this food!")
-            
-            // Start/Stop Scanning Button
-            Button(action: {
-                self.isScanning.toggle()
-                
-                if self.isScanning {
-                    CameraView(isScanning: $isScanning)
-                        .frame(width: 300, height: 300)                } else {
-                    cameraProcessor.captureSession.stopRunning()
+            ZStack {
+                if isScanning {
+                    if let cameraProcessor = self.cameraProcessor {
+                        CameraView(isScanning: $isScanning, cameraProcessor: cameraProcessor)
+                            .cornerRadius(12)
+                    }
+                    VStack {
+                        Spacer()
+                        Text("Scanning...")
+                            .foregroundColor(.white)
+                            .padding(.bottom, 10)
+                    }
+                } else {
+                    Color.gray.opacity(0.5)
+                        .cornerRadius(12)
+                    Text("Tap to Start Scanning")
+                        .foregroundColor(.white)
                 }
-                
-            }, label: {
+            }
+            .frame(width: 350, height: 350)
+            
+            Text("Prediction: \(currentPrediction)")
+                .font(.headline)
+                .padding(.top, 20)
+            
+            Spacer()
+            
+            Button(action: {
+                // Toggle scanning
+                DispatchQueue.main.async {
+                    self.isScanning.toggle()
+                }
+            }) {
                 Text(isScanning ? "Stop Scanning" : "Start Scanning")
                     .foregroundColor(.white)
-                    .padding()
+                    .padding(.horizontal, 40)
+                    .padding(.vertical, 15)
                     .background(Color.blue)
                     .cornerRadius(8)
-            })
+            }
+            .padding(.bottom, 20)
         }
-        .padding()
-        .border(Color.blue, width: 0.5)
-        .frame(width: 370, height: 540)
-        .cornerRadius(12, antialiased: false)
-    }
-}
-
-struct CameraPreview: UIViewRepresentable {
-    
-    var captureSession: AVCaptureSession
-    
-    func makeUIView(context: Context) -> some UIView {
-        let previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.videoGravity = .resizeAspectFill
-        
-        let cameraView = UIView(frame: .zero)
-        previewLayer.frame = cameraView.layer.bounds
-        cameraView.layer.addSublayer(previewLayer)
-        
-        return cameraView
-    }
-    
-    func updateUIView(_ uiView: UIViewType, context: Context) {
-        // No-op
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+        .onAppear {
+            if self.cameraProcessor == nil {
+                self.cameraProcessor = CameraProcessor(currentPrediction: self.$currentPrediction)
+            }
+        }
     }
 }

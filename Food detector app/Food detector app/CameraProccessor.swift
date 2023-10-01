@@ -2,20 +2,50 @@ import Foundation
 import SwiftUI
 import AVFoundation
 import CoreML
+import CoreImage
 import Vision
+import UIKit
+
 
 class CameraProcessor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, ObservableObject {
     
     var previewLayer: AVCaptureVideoPreviewLayer
     var captureSession: AVCaptureSession
+    var model: FoodCL?
+    var onPrediction: ((String) -> Void)?
     
     override init() {
         captureSession = AVCaptureSession()
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         super.init()
         
-        // Start the capture session
-        startCaptureSession()
+        startCaptureSession() // Start the capture session
+        
+        // load model
+        let config = MLModelConfiguration()
+        do {
+            self.model = try FoodCL(configuration: config)
+        } catch {
+            print("Failed to load the model: \(error)")
+        }
+    }
+    
+    // Add this initializer
+    convenience init(currentPrediction: Binding<String>) {
+        self.init()
+        
+        onPrediction = { newPrediction in
+            DispatchQueue.main.async {
+                currentPrediction.wrappedValue = newPrediction
+            }
+        }
+    }
+    
+    
+
+    
+    func setPreviewLayerFrame(frame: CGRect) {
+        self.previewLayer.frame = frame
     }
     
     private func startCaptureSession() {
@@ -52,33 +82,58 @@ class CameraProcessor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, O
             self.captureSession.startRunning()
         }
     }
-    
-    // ... (rest of the code remains unchanged)
-}
+    // This delegate method is called whenever a new video frame is captured
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // Retrieve the captured image buffer
+        guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+            return
+        }
+        
+        // Preprocess the frame to get the MLMultiArray
+        guard let mlMultiArray = preprocessFrame(pixelBuffer: pixelBuffer) else {
+            print("Preprocessing failed.")
+            return
+        }
+        
+        do {
+            if let unwrappedModel = model {
+                let modelInput = FoodCLInput(x_1: mlMultiArray)
+                if let modelOutput = try? unwrappedModel.prediction(input: modelInput) {
+                    // Assuming var_810 is the output MultiArray
+                    let outputArray = modelOutput.var_810
+                    
+                    // Convert MLMultiArray to [Float]
+                    let count = outputArray.count
+                    let doublePtr =  outputArray.dataPointer.bindMemory(to: Float.self, capacity: count)
+                    let doubleBuffer = UnsafeBufferPointer(start: doublePtr, count: count)
+                    let outputArrayFloat = Array(doubleBuffer)
+                    
+                    // Find maximum value and its index
+                    if let maxValue = outputArrayFloat.max() {
+                        if let maxIndex = outputArrayFloat.firstIndex(of: maxValue) {
+                            let imagePredictor = ImagePredictor()
 
-struct CameraView: UIViewControllerRepresentable {
-    @Binding var isScanning: Bool
-    private let cameraProcessor = CameraProcessor()
-    
-    func makeUIViewController(context: Context) -> UIViewController {
-        let viewController = UIViewController()
-        let cameraProcessor = CameraProcessor()
-        
-        cameraProcessor.previewLayer.frame = viewController.view.bounds
-        viewController.view.layer.addSublayer(cameraProcessor.previewLayer)
-        
-        return viewController
-    }
-    
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
-        // Update the preview layer when isScanning changes
-        if isScanning {
-            cameraProcessor.setPreviewLayerFrame(uiViewController.view.bounds)
-            if cameraProcessor.previewLayer.superlayer == nil {
-                uiViewController.view.layer.addSublayer(cameraProcessor.previewLayer)
+                            // Inside your captureOutput function after finding the max index
+                            do {
+                                let label = try imagePredictor.getLabel(index: maxIndex)
+                                onPrediction?(label)
+                            } catch {
+                                print("An error occurred: \(error)")
+                            }
+
+                        }
+                    }
+                } else {
+                    print("Prediction failed.")
+                }
             }
-        } else {
-            cameraProcessor.previewLayer.removeFromSuperlayer()
+        } catch {
+            print("An error occurred during inference: \(error)")
         }
     }
 }
+
+
+
+
+
