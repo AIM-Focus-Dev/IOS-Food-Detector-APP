@@ -1,7 +1,7 @@
 # Food Detector App🍔
 
 ## Overview
-The Food Detector App is an iOS application built using Swift and Core ML. It uses the device's camera to scan food items and then predicts the type of food using a pre-trained machine learning model with custom layers. 
+The Food Detector App is an iOS application built using Swift and Core ML. It uses the device's camera to scan food items and then predicts the type of food using a pre-trained machine learning model with custom layers, model is 65% accurate. 
 
 ## Features
 - Real-time food detection using the device's camera
@@ -17,10 +17,6 @@ The Food Detector App is an iOS application built using Swift and Core ML. It us
 
 
 
-
-
-
-
 ## Prerequisites
 - macOS with Xcode installed
 - An iOS device or simulator running iOS 13 or higher
@@ -31,9 +27,13 @@ The Food Detector App is an iOS application built using Swift and Core ML. It us
     ```bash
     git clone https://github.com/yourusername/food-detector-app.git
     ```
-2. Open the project in Xcode.
-3. If needed, download any additional libraries or SDKs as prompted by Xcode.
-4. Build and run the app on a device or simulator.
+2. Install requirements (Visit [Pytorch](https://pytorch.org) to download a suitble version for your machine/enviroment):
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Open the project in Xcode.
+4. If needed, download any additional libraries or SDKs as prompted by Xcode.
+5. Build and run the app on a device or simulator.
 
 ## How to Use
 - Tap the "Start Scanning" button to initiate the camera.
