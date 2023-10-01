@@ -13,6 +13,7 @@ class CameraProcessor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, O
     var captureSession: AVCaptureSession
     var model: FoodCL?
     var onPrediction: ((String) -> Void)?
+    var shouldCapture: Bool = false
     
     override init() {
         captureSession = AVCaptureSession()
@@ -41,6 +42,15 @@ class CameraProcessor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, O
         }
     }
     
+    func startCapturing() {
+        shouldCapture = true
+        captureSession.startRunning()
+    }
+
+    func stopCapturing() {
+        shouldCapture = false
+        captureSession.stopRunning()
+    }
     
 
     
@@ -84,6 +94,10 @@ class CameraProcessor: NSObject, AVCaptureVideoDataOutputSampleBufferDelegate, O
     }
     // This delegate method is called whenever a new video frame is captured
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if !shouldCapture {
+             return
+         }
+        
         // Retrieve the captured image buffer
         guard let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
             return

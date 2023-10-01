@@ -30,7 +30,7 @@ struct ContentView: View {
                 } else {
                     Color.gray.opacity(0.5)
                         .cornerRadius(12)
-                    Text("Tap to Start Scanning")
+                    Text("Tap Start Scanning")
                         .foregroundColor(.white)
                 }
             }
@@ -46,6 +46,11 @@ struct ContentView: View {
                 // Toggle scanning
                 DispatchQueue.main.async {
                     self.isScanning.toggle()
+                    if self.isScanning {
+                        self.cameraProcessor?.startCapturing()
+                    } else {
+                        self.cameraProcessor?.stopCapturing()
+                    }
                 }
             }) {
                 Text(isScanning ? "Stop Scanning" : "Start Scanning")
